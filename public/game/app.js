@@ -435,21 +435,21 @@ let modeCount = 0;
   h = stage.canvas.height;
 
   manifest = [
-    { src: "src/assets/img/bird.png", id: "bird" },
-    { src: "src/assets/img/background2.png", id: "background" },
-    { src: "src/assets/img/ground2.png", id: "ground" },
-    { src: "src/assets/img/pipe.png", id: "pipe" },
-    { src: "src/assets/img/restart.png", id: "start" },
-    { src: "src/assets/img/score.png", id: "score" },
-    { src: "src/assets/img/share.png", id: "share" },
-    { src: "src/assets/img/box.png", id: "prize" },
-    { src: "src/assets/img/poop.png", id: "poop" },
-    { src: "src/assets/img/coin.png", id: "coin" },
-    { src: "src/assets/img/add-to-leaderboard.png", id: "leaderboard" },
-    { src: "src/assets/fonts/FB.eot" },
-    { src: "src/assets/fonts/FB.svg" },
-    { src: "src/assets/fonts/FB.ttf" },
-    { src: "src/assets/fonts/FB.woff" },
+    { src: "/img/bird.png", id: "bird" },
+    { src: "/img/background2.png", id: "background" },
+    { src: "/img/ground2.png", id: "ground" },
+    { src: "/img/pipe.png", id: "pipe" },
+    { src: "/img/restart.png", id: "start" },
+    { src: "/img/score.png", id: "score" },
+    { src: "/img/share.png", id: "share" },
+    { src: "/img/box.png", id: "prize" },
+    { src: "/img/poop.png", id: "poop" },
+    { src: "/img/coin.png", id: "coin" },
+    { src: "/img/add-to-leaderboard.png", id: "leaderboard" },
+    { src: "/fonts/FB.eot" },
+    { src: "/fonts/FB.svg" },
+    { src: "/fonts/FB.ttf" },
+    { src: "/fonts/FB.woff" },
   ];
 
   loader = new createjs.LoadQueue(false);

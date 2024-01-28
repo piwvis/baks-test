@@ -333,20 +333,20 @@ function Init() {
 
   manifest = [
     {src: window.eventService.getUser().skinUrl, id: "bird"},
-    {src: "assets/img/background2.png", id: "background"},
-    {src: "assets/img/ground2.png", id: "ground"},
-    {src: "assets/img/pipe.png", id: "pipe"},
-    {src: "assets/img/restart.png", id: "start"},
-    {src: "assets/img/score.png", id: "score"},
-    {src: "assets/img/share.png", id: "share"},
-    {src: "assets/img/box.png", id: "prize"},
-    {src: "assets/img/poop.png", id: "poop"},
-    {src: "assets/img/coin.png", id: "coin"},
-    {src: "assets/img/add-to-leaderboard.png", id: "leaderboard"},
-    {src: "assets/fonts/FB.eot"},
-    {src: "assets/fonts/FB.svg"},
-    {src: "assets/fonts/FB.ttf"},
-    {src: "assets/fonts/FB.woff"}
+    {src: "img/background2.png", id: "background"},
+    {src: "img/ground2.png", id: "ground"},
+    {src: "img/pipe.png", id: "pipe"},
+    {src: "img/restart.png", id: "start"},
+    {src: "img/score.png", id: "score"},
+    {src: "img/share.png", id: "share"},
+    {src: "img/box.png", id: "prize"},
+    {src: "img/poop.png", id: "poop"},
+    {src: "img/coin.png", id: "coin"},
+    {src: "img/add-to-leaderboard.png", id: "leaderboard"},
+    {src: "/fonts/FB.eot"},
+    {src: "/fonts/FB.svg"},
+    {src: "/fonts/FB.ttf"},
+    {src: "/fonts/FB.woff"}
   ];
 
   loader = new createjs.LoadQueue(false);
