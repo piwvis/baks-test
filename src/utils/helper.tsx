@@ -2,12 +2,12 @@ import { useUser } from "@/hooks/use-user";
 
 export function loadScripts() {
   const dynamicScripts: string[] = [
-    "src/assets/game/createjs.js",
-    "src/assets/game/jquery.js",
-    "src/assets/game/bootstrap.js",
-    "src/assets/game/preload.js",
-    "src/assets/game/app.js",
-    "src/assets/game/after.js",
+    "/game/createjs.js",
+    "/game/jquery.js",
+    "/game/bootstrap.js",
+    "/game/preload.js",
+    "/game/app.js",
+    "/game/after.js",
   ];
 
   dynamicScripts.forEach((url) => {

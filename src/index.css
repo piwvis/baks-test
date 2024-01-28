@@ -91,5 +91,5 @@
 
 @font-face {
   font-family: Pixeboy;
-  src: url("fonts/pixeboy.ttf") format("truetype");
+  src: url("/fonts/pixeboy.ttf") format("truetype");
 }
