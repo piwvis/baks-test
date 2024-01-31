@@ -3,18 +3,20 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 export type UserDataType = {
-  status: boolean;
-  user: {
-    chatId: number /** Чат айди (ТГ) игрока */;
-    wallet: string | undefined /** Адрес кошелька пользователя */;
-    tokenBalance: number /** Баланс токенов пользователя */;
-  };
-  invited: number /** Количество приглашенных пользователей */;
-  refLink: string /** Реферальный код пользователя, пример: 'ASd746D'.
+  data: {
+    status: boolean;
+    user: {
+      chatId: number /** Чат айди (ТГ) игрока */;
+      wallet: string | undefined /** Адрес кошелька пользователя */;
+      tokenBalance: number /** Баланс токенов пользователя */;
+    };
+    invited: number /** Количество приглашенных пользователей */;
+    refLink: string /** Реферальный код пользователя, пример: 'ASd746D'.
          Используем для формирования реферальной ссылки такого формата: https://t.me/testyh1_bot?start=${refLink}*/;
-  boxCount: number /** Количество боксов, доступных для клейма */;
-  bestScore: number /** Лучший счёт в игре */;
-  skinUrl: string /** Ссылка на скин, который установлен у пользователя */;
+    boxCount: number /** Количество боксов, доступных для клейма */;
+    bestScore: number /** Лучший счёт в игре */;
+    skinUrl: string /** Ссылка на скин, который установлен у пользователя */;
+  };
 };
 
 export type Item = {
@@ -36,7 +38,7 @@ export type ShopList = {
   data: ItemToSell[];
 };
 
-export const useUser = (userToken: string) => {
+export const useGetUser = (userToken?: string | null) => {
   const query = useQuery({
     queryKey: ["user", userToken],
     queryFn: async () =>
@@ -53,10 +55,12 @@ export const useUser = (userToken: string) => {
   return query;
 };
 
-export const useClaim = (userToken: string) => {
-  const query = useQuery({
-    queryKey: ["user", userToken],
-    queryFn: async () =>
+export const useClaim = () => {
+  const queryClient = useQueryClient();
+
+  const query = useMutation({
+    mutationKey: ["claim-tokens"],
+    mutationFn: async (userToken: string | null) =>
       axios
         .get<{ status: boolean; value: number }>(
           `${API.API_URL}/users/claim?token=${userToken}`,
@@ -68,6 +72,9 @@ export const useClaim = (userToken: string) => {
           }
           throw err;
         }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
   });
   return query;
 };

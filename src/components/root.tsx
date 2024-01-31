@@ -6,6 +6,7 @@ import bg from "@/assets/sprites/bg.png";
 import { useStartGame } from "@/hooks/use-start-game";
 import { Route } from "@/routes/$userToken";
 import { useUserValidity } from "@/hooks/use-user-validity";
+import { useGetUser } from "@/hooks/use-user";
 
 export default function Root() {
   const { isStart } = useStartGame();
@@ -19,7 +20,17 @@ export default function Root() {
   }, [isStart]);
 
   useAssignWindowMethods();
-  useUserValidity(userToken.userToken);
+  const { data } = useUserValidity(userToken.userToken);
+  const { data: user } = useGetUser(localStorage.getItem("token"));
+
+  useEffect(() => {
+    data?.token && localStorage.setItem("token", data.token);
+    if (user) {
+      window.token = data?.token;
+      window.user = { ...user?.data };
+    }
+  }, [data, data?.token, userToken, user]);
+  console.log(user);
 
   if (isStart) {
     return (

@@ -27,10 +27,8 @@ function ShopIndexComponent() {
     itemsSection.push(
       items?.data.filter((item) => item.itemType === shop_sections[section]),
     );
-    console.log("array test", itemsSection);
     return itemsSection[0];
   }, [items?.data, section]);
-  console.log("array", itemsSection);
 
   return (
     <div className="flex justify-center items-center flex-col">
@@ -66,7 +64,6 @@ function ShopIndexComponent() {
         <div className="px-8 mt-10 grid justify-center grid-cols-2 gap-x-5 gap-y-12">
           {itemsSection &&
             itemsSection.map((item) => {
-              console.log(item);
               return (
                 <Link
                   to={"/shop/$itemId"}

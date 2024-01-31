@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 export type UserValidityType = {
-  id: string;
-  title: string;
-  body: string;
+  status: string;
+  token: string;
+  until: string;
 };
 
 export const useUserValidity = (userToken: string) => {

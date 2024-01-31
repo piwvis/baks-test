@@ -409,7 +409,6 @@ var masterPipeDelay = 1.5; // delay between pipes
 var pipeDelay = masterPipeDelay; //counter used to monitor delay
 var restartable = false;
 var rd = 0;
-var health = 10;
 var token; // the token we can use to submit our score
 
 var counterShow = false;
@@ -427,12 +426,14 @@ let modeCount = 0;
   stage = new createjs.Stage("testCanvas");
 
   createjs.Touch.enable(stage);
-  // stage.canvas.width = document.body.clientWidth; //document.width is obsolete
-  // stage.canvas.height = document.body.clientHeight; //document.height is obsolete
+  stage.canvas.width = document.body.clientWidth; //document.width is obsolete
+  stage.canvas.height = document.body.clientHeight; //document.height is obsolete
 
   // grab canvas width and height for later calculations:
   w = stage.canvas.width;
   h = stage.canvas.height;
+
+  console.log(w, h)
 
   manifest = [
     { src: "/img/bird.png", id: "bird" },
@@ -472,7 +473,7 @@ function handleComplete() {
     .beginBitmapFill(groundImg)
     .drawRect(0, 0, w + groundImg.width, groundImg.height);
   ground.tileW = groundImg.width;
-  ground.y = h - groundImg.height - outerPadding;
+  ground.y = h - groundImg.height + 50;
 
   var data = new createjs.SpriteSheet({
     images: [loader.getResult("bird")],
@@ -484,7 +485,7 @@ function handleComplete() {
   bird = new createjs.Sprite(data, "fly");
 
   startX = w / 2 - 92 / 2;
-  startY = 512 + outerPadding;
+  startY = 512 - 100;
   wiggleDelta = 18;
 
   // Set initial position and scale 1 to 1
@@ -524,42 +525,24 @@ function handleComplete() {
 
   counter = createText(false, "#ffffff", 1, "86px");
   modeText = createText(false, "#ffffff", 1, "86px");
-  counterOutline = createText(true, "#000000", 1, "86px");
+  // counterOutline = createText(true, "#ffffff", 1, "86px");
   highScore = createText(false, "#ffffff", 0, "60px");
-  highScoreOutline = createText(true, "#000000", 0, "60px");
+  // highScoreOutline = createText(true, "#ffffff", 0, "60px");
   modeText.y = 260;
   modeText.alpha = 0;
 
-  stage.addChild(modeText, counter, counterOutline);
+  stage.addChild(modeText, counter);
 
   createjs.Ticker.timingMode = createjs.Ticker.RAF;
   createjs.Ticker.interval = 100;
   createjs.Ticker.addEventListener("tick", tick);
 
-  // setHeight()
 
-  console.log(window.eventService.getUser());
-  if (window.eventService.getUser()) {
-    highScore.text = 0;
-    highScoreOutline.text = 0;
+  if (window.user) {
+    highScore.text = window.user.bestScore;
+    // highScoreOutline.text = window.user.data.bestScore;
   }
-  /*  if (supports_html5_storage()) {
-      var storage = localStorage.getItem("highScore");
-      if (storage) {
-        highScore.text = storage;
-        highScoreOutline.text = storage;
-      } else {
-        localStorage.setItem("highScore", 0);
-      }
-    } else {
-      var myCookie = document.cookie.replace(/(?:(?:^|.*;\s*)highScore\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-      if (myCookie) {
-        highScore.text = myCookie;
-        highScoreOutline.text = myCookie;
-      } else {
-        document.cookie = "highScore=0";
-      }
-    }*/
+
 }
 
 function handleKeyDown(e) {
@@ -651,19 +634,18 @@ function restart() {
     .to({ y: start.y + 10 }, 50)
     .call(removeStart);
   counter.text = 0;
-  counterOutline.text = 0;
-  counterOutline.alpha = 0;
+  // counterOutline.text = 0;
+  // counterOutline.alpha = 0;
   counter.alpha = 0;
-  counter.font = "86px 'Flappy Bird'";
-  counterOutline.font = counter.font;
+  counter.font = "86px 'Pixelify Sans'";
   counter.y = 150 + outerPadding;
   modeText.y = 250 + outerPadding;
   modeText.text = "REKT";
-  modeText.font = "86px 'Flappy Bird'";
-  counterOutline.y = counter.y;
+  modeText.font = "86px 'Pixelify Sans'";
+  // counterOutline.y = counter.y;
   counterShow = false;
   highScore.alpha = 0;
-  highScoreOutline.alpha = 0;
+  // highScoreOutline.alpha = 0;
   pipeDelay = masterPipeDelay;
   dead = false;
   started = false;
@@ -695,13 +677,8 @@ function die() {
     highScoreOutline.text = 500;*/
   if (counter.text > highScore.text) {
     highScore.text = counter.text;
-    highScoreOutline.text = counterOutline.text;
-
-    /*    if (supports_html5_storage()) {
-          localStorage.setItem("highScore", counter.text);
-        } else {
-          document.cookie = "highScore=" + counter.text;
-        }*/
+    window.setScore(localStorage.getItem("token"))
+    // highScoreOutline.text = counterOutline.text;
   }
 
   // window.eventService.sendEvent({
@@ -718,43 +695,43 @@ function die() {
   createjs.Tween.get(stage).to({ alpha: 0 }, 100).to({ alpha: 1 }, 100);
 
   score = addImageAtCenter("score", 0, -150);
-  start = addImageAtCenter("start", -120, 50);
-  share = addImageAtCenter("share", 120, 50);
+  start = addImageAtCenter("start", 0 , 50);
+  share = addImageAtCenter("share", 0, 150);
   leaderboard = addImageAtCenter("leaderboard", 0, 150);
 
-  stage.removeChild(counter, counterOutline);
+  stage.removeChild(counter);
   //prizeBox = addImageAtCenter('prize', 0, -150);
   stage.addChild(score);
   stage.addChild(start);
   stage.addChild(share);
-  stage.addChild(leaderboard);
+  // stage.addChild(leaderboard);
 
-  counter.y = counter.y + 160;
-  counter.font = "60px 'Flappy Bird'";
-  counterOutline.y = counter.y;
-  counterOutline.font = "60px 'Flappy Bird'";
+  counter.y = counter.y - 20;
+  counter.font = "60px 'Pixelify Sans'";
+  // counterOutline.y = counter.y;
+  // counterOutline.font = "60px 'Flappy Bird'";
   counter.alpha = 0;
-  counterOutline.alpha = 0;
+  // counterOutline.alpha = 0;
 
-  modeText.y = 260;
-  modeText.font = "60px 'Flappy Bird'";
+  modeText.y = 50;
+  modeText.font = "60px 'Pixelify Sans'";
   modeText.alpha = 0;
 
   // highScore.text = 30
   // highScoreOutline.text = 30
   highScore.y = counter.y + 80;
-  highScoreOutline.y = highScore.y;
+  // highScoreOutline.y = highScore.y;
 
-  stage.addChild(counter, counterOutline, highScore, highScoreOutline);
+  stage.addChild(counter, highScore);
 
   //dropIn(prizeBox);
   dropIn(score);
   dropIn(start);
-  dropIn(leaderboard);
+  // dropIn(leaderboard);
   dropIn(counter);
-  dropIn(counterOutline);
+  // dropIn(counterOutline);
   dropIn(highScore);
-  dropIn(highScoreOutline);
+  // dropIn(highScoreOutline);
   createjs.Tween.get(share)
     .to({ alpha: 1, y: share.y + 50 }, 400, createjs.Ease.sineIn)
     .call(addClickToStart);
@@ -764,15 +741,15 @@ function removeStart() {
   stage.removeChild(start);
   stage.removeChild(share);
   stage.removeChild(score);
-  stage.removeChild(leaderboard);
+  // stage.removeChild(leaderboard);
 }
 
 function addClickToStart(item) {
   start.addEventListener("click", restart);
   share.addEventListener("click", goShare);
-  leaderboard.addEventListener("click", function () {
-    submitScore(token);
-  });
+  // leaderboard.addEventListener("click", function () {
+  //   submitScore(token);
+  // });
   restartable = true;
 }
 
@@ -793,7 +770,7 @@ function addImageAtCenter(id, xOffset, yOffset) {
 }
 
 function createText(isOutline, color, alpha, fontSize) {
-  var text = new createjs.Text(0, fontSize + " 'Flappy Bird'", color);
+  var text = new createjs.Text(0, fontSize + " 'Pixelify Sans'", color);
   if (isOutline) {
     text.outline = 5;
   }
@@ -805,27 +782,6 @@ function createText(isOutline, color, alpha, fontSize) {
   return text;
 }
 
-function goShare() {
-  // window.eventService.sendEvent({
-  //   type: "share",
-  //   data: Number(counter.text),
-  // });
-  //window.open("http://twitter.com/share?url=http%3A%2F%2Fflappybird.io&text=I scored " + countText + " on HTML5 Flappy Bird.");
-}
-
-// function showAd() {
-//     $('.in-game-unit')
-// }
-
-function supports_html5_storage() {
-  try {
-    localStorage.setItem("test", "foo");
-    return "localStorage" in window && window.localStorage !== null;
-  } catch (e) {
-    return false;
-  }
-}
-
 function tick(event) {
   var deltaS = event.delta / 1000;
 
@@ -833,9 +789,8 @@ function tick(event) {
 
   if (bird.y > ground.y - 40) {
     if (!dead) {
-      console.log(health);
-      if (health > 0) {
-        // window.eventService.reduceHealth();
+      if (window.health > 0) {
+        window.reduceHealth();
         handleJumpStart();
       } else {
         die();
@@ -869,7 +824,6 @@ function tick(event) {
       pipe.x = w + 600;
       pipe.y = (ground.y - changedGap * 2) * Math.random() + changedGap * 1.5;
       pipes.addChild(pipe);
-      console.log(pipe);
 
       if (pipes.numChildren % 5 === 0) {
         prize = new createjs.Bitmap(loader.getResult("prize"));
@@ -926,6 +880,7 @@ function tick(event) {
               //   type: "box",
               //   data: pipes.numChildren,
               // });
+              window.getBox(localStorage.getItem("token"))
               boxes.removeChild(prize);
             }
           }
@@ -982,9 +937,8 @@ function tick(event) {
           var collision = ndgmr.checkRectCollision(pipe, bird, 1, true);
           if (collision) {
             if (collision.width > 8 && collision.height > 8) {
-              console.log(health);
-              if (health > 0) {
-                // window.eventService.reduceHealth();
+              if (window.health > 0) {
+                window.reduceHealth()
                 pipes.removeChild(pipe);
                 removed = true;
               } else {
@@ -1002,7 +956,7 @@ function tick(event) {
             //   type: "count",
             //   data: Number(counter.text),
             // });
-            counterOutline.text = counterOutline.text + 1;
+            // counterOutline.text = counterOutline.text + 1;
             countPipes += 1;
             modeCount += 1;
             if (modeCount > 10) {
@@ -1018,7 +972,7 @@ function tick(event) {
     }
     if (counterShow) {
       counter.alpha = 1;
-      counterOutline.alpha = 1;
+      // counterOutline.alpha = 1;
       counterShow = false;
     }
 

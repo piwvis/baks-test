@@ -17,7 +17,6 @@ function ItemComponent() {
     () => items?.data.find((item) => item.id === itemId),
     [itemId, items?.data],
   );
-  console.log(itemData);
   return (
     <section className="mb-20">
       <Link to="/shop">

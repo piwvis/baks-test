@@ -329,7 +329,6 @@ function Init() {
   w = stage.canvas.width;
   h = stage.canvas.height;
 
-  const {data} = useUser()
 
   manifest = [
     {src: window.eventService.getUser().skinUrl, id: "bird"},

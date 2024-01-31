@@ -1,4 +1,5 @@
-import { useUser } from "@/hooks/use-user";
+import axios from "axios";
+import { API } from "./api";
 
 export function loadScripts() {
   const dynamicScripts: string[] = [
@@ -19,6 +20,36 @@ export function loadScripts() {
   });
 }
 
+const getUser = async (userToken: string) => {
+  const { data } = await axios.get(
+    `${API.API_URL}/users/get?token=${userToken}`,
+  );
+  return data;
+};
+
+const setScore = async (userToken: string, score: string) => {
+  const { data } = await axios.post(`${API.API_URL}/users/score`, {
+    token: userToken,
+    score: score,
+  });
+  return data;
+};
+
+const getBox = async (userToken: string) => {
+  const { data } = await axios.post(`${API.API_URL}/users/box`, {
+    token: userToken,
+  });
+  return data;
+};
+
+const reduceHealth = () => {
+  window.health = window.health - 1;
+};
+
 export const useAssignWindowMethods = () => {
-  window.useUser = useUser;
+  window.getUser = getUser;
+  window.reduceHealth = reduceHealth;
+  window.getBox = getBox;
+  window.setScore = setScore;
+  window.health = 1;
 };
